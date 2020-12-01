@@ -1,3 +1,7 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
 body{
   font-family: Arial,Helvetica,sans-serif !important;
   background-image: url("../foto/takto.png");
@@ -6,6 +10,74 @@ body{
   background-position: center;
   background-size: cover;
 }
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: right
+}
+
+.rating>input {
+    display: none
+}
+
+.rating>label {
+    position: relative;
+    font-size: 40px;
+    color: #ff0400d6;
+    cursor: pointer
+}
+
+.rating>label::before {
+    content: "\2605";
+    position: absolute;
+    opacity: 0
+}
+
+.rating>label:hover:before,
+.rating>label:hover~label:before {
+    opacity: 1 !important
+}
+
+.rating>input:checked~label:before {
+    opacity: 1
+}
+
+.rating:hover>input:checked~label:before {
+    opacity: 0.4
+}
+
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 14px
+    }
+
+    p {
+        font-size: 12px
+    }
+}
+
+.textKomentare{
+  overflow: hidden!important;
+  word-break: break-all!important;
+  display: block!important;
+}
+.karta{
+    border-radius: 25px;
+    background-color:#ff00000f;
+    width:100%;
+    padding: 15px;
+    border: none;
+    margin-top: 10px
+}
+.u-color {
+    color: red
+}
+
+.user-image img {
+    border: 3px solid red;
+    padding: 2px
+}
+
 .counter {
 background-color:unset;
 padding: 20px 0;
@@ -459,22 +531,6 @@ a.forum-item-title:hover {
   margin-left:unset;
   margin-right:unset;
 }
-#textUvod{
-  margin-bottom: 50px;
-  text-align: center;
-  margin-top: 100px;
-  color:white;
-  font-weight: bold;
-  font-family: Arial,Helvetica,sans-serif !important;
-}
-#textAteam{
-  margin-bottom: 50px;
-  text-align: center;
-  margin-top: 150px;
-  color:white;
-  font-weight: bold;
-  font-family: Arial,Helvetica,sans-serif !important;
-}
 .odkazReg{
   color:white;
    text-decoration: underline;
@@ -482,6 +538,10 @@ a.forum-item-title:hover {
 .odkazReg:hover{
   color:gray;
   font-weight: bold;
+}
+#selektor{
+  width:50%;
+	height:30px;
 }
 .uvodVety{
   margin-left: auto;
@@ -664,10 +724,6 @@ span{
 }
 #indexText{
   font-size: 27px;
-}
-#uvodTexto{
-  font-size: 16pt;
-  padding:10px;
 }
 #errorMess{
   text-align: center;
