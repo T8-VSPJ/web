@@ -1,6 +1,8 @@
 <?php
 	session_start();
-	include_once '../scripts/dtb.php'
+		include '../scripts/kontrola.php';
+	include_once '../scripts/dtb.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="cs">
@@ -26,163 +28,13 @@
 </head>
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-light">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <a class="navbar-brand" id="menuUvodLogo" href="../index.php"><img src="../photos/logospolytechnikos_logo.png" class="logoNavbar" alt="navbar logo"></a>
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0" id="menuUvod">
-          <li class="nav-item">
-            <a class="nav-link" href="clanky.php"><i class="fas fa-clipboard-list" style="margin-right:7px;"></i>Články</a>
-          </li>
-        </ul>
-        <div class="ml-auto" id="profilLinky">
-          <?php
-            if(!isset($_SESSION['idUzivatele'])){
-                echo '<button type="submit" class="btn btn-light btn-lg" data-toggle="modal" data-target="#modalLogin" style="margin-top: -5px;float:right;">Login</button>';
-            }
-            else{
-              echo '<form action="../scripts/odhlaseni.php" method="post" style="float:right;">
-                       <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-                          if($_SESSION['statusUzivatele'] == 1){
-                            $filename="../profilovky/profile".$_SESSION['idUzivatele']."*";
-                            $fileinfo=glob($filename);
-                            $fileext=explode(".",$fileinfo[0]);
-                            echo '<img src="../profilovky/profile'.$_SESSION['idUzivatele'].'.'.$fileext[1].'" id="profilFoto" width="50" height="45" alt="Profilová fotka"></a>';
-                          }
-                          else{
-                            echo '<img src="../profilovky/default.jpg" id="profilFoto" width="50" height="48" alt="Profilová fotka"></a>';
-                          }
-              echo	  '<a id="jmenoUzivateleNavbar" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$_SESSION['jmenoUzivatele'].'</a>
 
-                       <!--DROPDOWN MENU PROFILOVKA-->
-                          <div class="dropdown-menu" id="dropMenu">';
-													if($_SESSION['stavAutor'] == 1)
-													{
-														echo '<button class="dropdown-item" style="cursor:pointer;text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Autor</button>';
-													}
-													else if($_SESSION['stavRedaktor'] == 1)
-													{
-														echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Redaktor</button>';
-													}
-													else if($_SESSION['stavRecenzant'] == 1)
-													{
-														echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Recenzent</button>';
-													}
-													else if($_SESSION['stavSefredaktor'] == 1)
-													{
-														echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Šéfredaktor</button>';
-													}
-													else if($_SESSION['stavAdmin'] == 1)
-													{
-														echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Admininstátor</button>';
-													}
-
-              echo				'<hr><a class="dropdown-item" href="nastaveni.php">Nastavení</a><hr>';
-                            if($_SESSION['stavAutor'] == 1 || $_SESSION['stavSefredaktor'] == 1 || $_SESSION['stavAdmin'] == 1 || $_SESSION['stavAdmin'] == 1){
-                              echo	'<a class="dropdown-item" href="editor.php">Editor článků</a>';
-                            }
-														if($_SESSION['stavRedaktor'] == 1 || $_SESSION['stavRecenzant'] == 1 || $_SESSION['stavSefredaktor'] == 1 || $_SESSION['stavAdmin'] == 1){ 	//Přidání události
-															echo	'<a class="dropdown-item" href="editor.php">Hodnotit příspěvky</a>';
-															echo	'<a class="dropdown-item" href="pridatUdalost.php">Přidat událost</a>';
-                            }
-                            if($_SESSION['stavAdmin'] == 1){
-															echo	'<a class="dropdown-item" href="pages/editor.php">Admin menu</a>';
-                            }
-                      echo			   '<div class="dropdown-divider"></div>
-                                <button class="dropdown-item" type="submit" style="cursor:pointer;">Odhlásit se</button>
-                              </div>
-                          <!--KONEC DROPDOWN MENU PROFILOVKA-->
-                        </form>';
-            }
-          ?>
-      </div>
-    </div>
-  </nav>
-  <!--MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL-->
-  <br>
-			<div class="modal fade seminor-login-modal" data-backdrop="static" id="modalRegistr">
-		      <div class="modal-dialog modal-dialog-centered modal-lg">
-		        <div class="modal-content">
-		          <div class="modal-header">
-		           <h5 class="modal-title">Zaregistrujte se</h5>
-		          </div>
-		          <br>
-		          <form class="modal-body seminor-login-form" method="post" action="../scripts/registrace.php">
-		            <div class="form-group">
-		              <input type="text" class="form-control" name="jmeno">
-		              <label class="form-control-placeholder">Uživatelské jméno</label>
-		            </div>
-		            <div class="form-group">
-		              <input type="email" class="form-control" name="email">
-		              <label class="form-control-placeholder">E-mail</label>
-		            </div>
-		            <div class="form-group">
-		              <input type="password" class="form-control" name="heslo1">
-		              <label class="form-control-placeholder">Heslo (min. 8 znaků)</label>
-		            </div>
-		            <div class="form-group">
-		              <input type="password" class="form-control" name="heslo2">
-		              <label class="form-control-placeholder">Potvrzení hesla</label>
-		            </div>
-								<div class="form-group" style="background-color:unset!important;border:unset!important;height:unset!important;width: 308px;">
-								  <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="souhlasim_se_zpracovanim_udaju" name="gdprCheck">
-								  <label class="form-check-label" for="inlineCheckbox1">Seznámil/a jsem se s <a href="phpStranky/gdpr.php">informacemi o zpracování osobních údajů</a></label>
-								</div>
-								<div class="g-recaptcha" data-sitekey="6Ldd7fwUAAAAAPCU09wt00lbvnBU6cJxbFoAIdbu" style="display: table;margin-left:auto;margin-right:auto;"></div>
-		            <br>
-		            <input type="submit" name="registrace" class="loginButton" value="Registrovat se">
-		          </form>
-		          <br>
-		          <div class="modal-footer">
-		              <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
-		            </div>
-		        </div>
-		      </div>
-		    </div>
-
-		  <div class="modal fade seminor-login-modal" id="modalLogin" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-		      <div class="modal-content">
-		        <div class="modal-header">
-		          <h5 class="modal-title" id="exampleModalLabel">Přihlásit se</h5>
-		          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		            <span aria-hidden="true">&times;</span>
-		          </button>
-		        </div>
-		        <div class="modal-body">
-							<form class="modal-body" method="post" action="../scripts/prihlaseni.php">
-		                <div class="form-group">
-		                  <input type="email" class="form-control" name="email">
-		                  <label class="form-control-placeholder">E-mail</label>
-		                </div>
-		                <div class="form-group">
-		                  <input type="password" class="form-control" name="heslo1">
-		                  <label class="form-control-placeholder">Heslo</label>
-		                </div>
-										<div class="create-new-fau text-center pt-3">
-											<a href="phpStranky/zapomenuteHeslo.php" class="text-primary-fau">Zapomenuté heslo</a>
-		                </div>
-		                <input type="submit" name="login" class="loginButton" value="Login">
-		                <div class="create-new-fau text-center pt-3">
-		                    <a href="#" class="text-primary-fau"><span data-toggle="modal" data-target="#modalRegistr" data-dismiss="modal">Nejste zaregistrovaný? Zaregistrujte se zde!</span></a>
-		                </div>
-		                <br>
-		          </form>
-		        </div>
-		        <div class="modal-footer">
-		          <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
-		        </div>
-		      </div>
-		    </div>
-		  </div>
-  <!--KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL-->
   <?php
+  include "menu.php";
 		$celaURL="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 		$idClanku = substr($celaURL, strrpos($celaURL, 'a')+1);
 
-		if($celaURL == "http://localhost/pages/clanky.php" || $celaURL=="http://loclahost/clanky.php" || $celaURL=="http://localhost/pages/clanky.php?strana".$idClanku){
+		if($celaURL == "http://logospolytechnos.mzf.cz/pages/clanky.php" || $celaURL=="http://logospolytechnos.mzf.cz/clanky.php" || $celaURL=="http://logospolytechnos.mzf.cz/pages/clanky.php?strana".$idClanku){
 			if($idClanku == 1){
 				$pom = 0;
 			}
@@ -199,12 +51,10 @@
 				echo '
         <br>
         <div class="container">
-          <h1 class="nadpisNastaveni" style="margin-bottom:50px;">Články</h1>
-						<div class="row">
-							<div class="col-md-12">
-							  <p>Zde naleznete všechny články</p>
-							</div>
-						</div>';
+
+						
+						
+				 <h1 class="nadpisNastaveni" style="margin-bottom:20px;">Články</h1>	';
 				while($row = mysqli_fetch_assoc($vys)){	//pomoci tohoto vlastne muzeme pouzit prikaz row. Protože si do něj bereme data z tabulky
 					$idcko=$row['id_autora'];
 					$sqli = "SELECT * FROM uzivatele WHERE id=$idcko"; 	//limit - max int
@@ -216,6 +66,7 @@
 					$id=$row['id'];
 
 					echo '<div class="row">
+					         
 							<div class="col-md-9">
 
 								<div class="row mb-2">
@@ -224,15 +75,21 @@
 											<div class="card-body">
 												<div class="row">
 													<div class="col-md-4">';
-														if($row['status'] == 1){
-                              $filename="../photos/clanekUvod".$id."*";
+											if($row['fotka'] > 0)
+											{
+											
+                                        $filename="../photos/clanek".$row['fotka']."*";
                     					$fileinfo=glob($filename);
-                    					$fileext=explode(".",$fileinfo[0]);
-														 echo '<img src="../photos/clanekUvod'.$id.'.'.$fileext[3].'" style="width:100%;" alt="Uvodni fotografie clanku">';
-														}
-														else{
-														 echo '<img src="../photos/default.jpg" style="width:100%;" alt="Uvodni fotografie clanku">';
-														}
+                    					$fileext=explode(".",$fileinfo[0]);  
+                    				echo '<img src="../photos/clanek'.$row['fotka'].'.'.$fileext[3].'" style="width:100%;height: 200px;" alt="Uvodni fotografie clanku">';
+
+											}
+											else{
+											echo '<img src="../photos/default.jpg" style="width:100%;height: 200px;" alt="Uvodni fotografie clanku">';
+  
+											}
+                    					
+													
 											  echo '</div>
 													<div class="col-md-8" id="textClankuCss">
 														<div class="news-title">
@@ -240,12 +97,10 @@
 														</div>
 														<div class="news-cats">
 															<ul class="list-unstyled list-inline mb-1">
-																<li class="list-inline-item">
-																		<small><i class="fas fa-align-left" style="margin-right:5px;"></i>'.$row['zarazeni'].'</small>
-																</li>
+															
 																 <li class="list-inline-item">
 																		<i class="fa fa-folder-o text-danger"></i>
-																		<small><i class="fas fa-user-alt" style="margin-right:5px;"></i>Autor: '.$rowUzivatel['jmeno'].'</small>
+																		<small><i class="fas fa-user-alt" style="margin-right:5px;"></i>'.$rowUzivatel['jmeno'].'</small>
 																</li>
 																 <li class="list-inline-item">
 																		<small><i class="far fa-calendar-alt" style="margin-right:5px;"></i>'.date('d.m.Y', $datumik).'</small>
@@ -253,7 +108,15 @@
 															</ul>
 														</div>
 														<div class="news-content">
-															<p>'.$row['text'].'</p>
+															<p>';
+															
+															if(strlen($row['text']) > 39){
+															    echo ''.strip_tags(substr($row['text'],0,39)).' (...)';
+															}
+															else{
+															    echo '(...)';
+															}
+														echo '</p>
 														</div>
 														<div class="news-buttons">
 															<a class="btn btn-outline-danger btn-sm" href="?clanek'.$row['id'].'">Zobrazit vše</a>
@@ -274,19 +137,19 @@
 								  <ul class="pagination">
 									<li class="page-item">';
 									if($idClanku==1){
-							   echo	 '<a class="page-link" href="http://localhost/pages/clanky.php?strana'.($idClanku-1).'" aria-label="Previous" style="background-color: #ffc9c9;pointer-events: none;">
+							   echo	 '<a class="page-link" href="pages/clanky.php?strana'.($idClanku-1).'" aria-label="Previous" style="background-color: #ffc9c9;pointer-events: none;">
 										<span aria-hidden="true">«</span>
 										<span class="sr-only">Předchozí</span>
 									  </a>';
 									}
 									else if($idClanku > 1){
-							echo	 '<a class="page-link" href="http://localhost/pages/clanky.php?strana'.($idClanku-1).'" aria-label="Previous">
+							echo	 '<a class="page-link" href="pages/clanky.php?strana'.($idClanku-1).'" aria-label="Previous">
 										<span aria-hidden="true">«</span>
 										<span class="sr-only">Předchozí</span>
 									  </a>';
 									}
 									else{
-							echo	 '<a class="page-link" href="http://localhost/pages/clanky.php?strana1" aria-label="Previous" style="background-color: #ffc9c9;pointer-events: none;">
+							echo	 '<a class="page-link" href="pages/clanky.php?strana1" aria-label="Previous" style="background-color: #ffc9c9;pointer-events: none;">
 										<span aria-hidden="true">«</span>
 										<span class="sr-only">Předchozí</span>
 									  </a>';
@@ -308,27 +171,27 @@
 											$_SESSION['pocetStran']=($vsechnyClankyPocet/10) + 1;
 										}
 										$pomKontrola=0;
-										echo '<li class="page-item"><a class="page-link" href="http://localhost/pages/clanky.php?strana1">1</a></li>';
+										echo '<li class="page-item"><a class="page-link" href="pages/clanky.php?strana1">1</a></li>';
 										for ($i = 2; $i <= $_SESSION['pocetStran']; $i++) {
-											echo '<li class="page-item"><a class="page-link" href="http://localhost/pages/clanky.php?strana'.$i.'">'.$i.'</a></li>';
+											echo '<li class="page-item"><a class="page-link" href="pages/clanky.php?strana'.$i.'">'.$i.'</a></li>';
 											$pomKontrola=$i;
 										}
 							echo  '<li class="page-item">';
 								if($idClanku==$pomKontrola){
-								   echo	 '<a class="page-link" href="http://localhost/pages/clanky.php?strana'.($idClanku+1).'" aria-label="Next" style="background-color: #ffc9c9;pointer-events: none;">
+								   echo	 '<a class="page-link" href="http:pages/clanky.php?strana'.($idClanku+1).'" aria-label="Next" style="background-color: #ffc9c9;pointer-events: none;">
 											<span aria-hidden="true">»</span>
 											<span class="sr-only">Další</span>
 									  	</a>';
 										}
 								else if($idClanku == "nky.php")
 								{
-									echo	 '<a class="page-link" href="http://localhost/pages/clanky.php?strana2" aria-label="Next">
+									echo	 '<a class="page-link" href="pages/clanky.php?strana2" aria-label="Next">
 											<span aria-hidden="true">»</span>
 											<span class="sr-only">Další</span>
 									  	</a>';
 								}
 								else{
-								echo  '<a class="page-link" href="http://localhost/pages/clanky.php?strana'.($idClanku+1).'" aria-label="Next">
+								echo  '<a class="page-link" href="pages/clanky.php?strana'.($idClanku+1).'" aria-label="Next">
 											<span aria-hidden="true">»</span>
 											<span class="sr-only">Další</span>
 									  </a>';
@@ -382,12 +245,10 @@
 													</div>
 													<div class="news-cats">
 														<ul class="list-unstyled list-inline mb-1">
-																<li class="list-inline-item">
-																		<small><i class="fas fa-align-left" style="margin-right:5px;"></i>'.$row['zarazeni'].'</small>
-																</li>
+															
 																 <li class="list-inline-item">
 																		<i class="fa fa-folder-o text-danger"></i>
-																		<small><i class="fas fa-user-alt" style="margin-right:5px;"></i>Autor: '.$rowUzivatel['jmeno'].'</small>
+																		<small><i class="fas fa-user-alt" style="margin-right:5px;"></i>'.$rowUzivatel['jmeno'].'</small>
 																</li>
 																 <li class="list-inline-item">
 																		<small><i class="far fa-calendar-alt" style="margin-right:5px;"></i>'.date('d.m.Y', $datumik).'</small>
@@ -396,37 +257,25 @@
 													</div>
 													<hr>
 													<div class="news-image">';
-														if($row['status'] == 1){
-                              $filename="../photos/clanekUvod".$_SESSION['idClanku']."*";
-                        			$fileinfo=glob($filename);
-                        			$fileext=explode(".",$fileinfo[0]);
-														 echo '<img src="../photos/clanekUvod'.$_SESSION['idClanku'].'.'.$fileext[3].'" style="width:100%;" alt="Uvodni fotografie clanku">';
-														}
-														else{
-														 echo '<img src="../photos/default.jpg" style="width:100%;" alt="Uvodni fotografie clanku">';
-														}
+											if($row['fotka'] > 0)
+											{
+											
+                                        $filename="../photos/clanek".$row['fotka']."*";
+                    					$fileinfo=glob($filename);
+                    					$fileext=explode(".",$fileinfo[0]);  
+                    				echo '<img src="../photos/clanek'.$row['fotka'].'.'.$fileext[3].'" style="width:100%;" alt="Uvodni fotografie clanku">';
+
+											}
+											else{
+											echo '<img src="../photos/default.jpg" style="width:100%;" alt="Uvodni fotografie clanku">';
+  
+											}
 														echo '<p class="text-muted ">'.$row['popisUvod'].'</p>';
 											echo   '</div>
 													<div class="news-content">
 														<p>'.$row['text'].'</p>
-													</div>
-													<hr>';
-													if(isset($_SESSION['idUzivatele']))
-													{
-														echo '
-														<p style="float:left;">
-														Ohodnotit článek<br>
-														Každé hodnocení nás posouvá vpřed! Děkujeme</p>
-														<form action="" method="post">
-															<div class="rating">
-																	<input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
-																	<input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
-																	<input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
-																	<input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
-																	<input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
-															</div>
-														</form>';
-													}
+													</div>';
+												
 													/*
 													if($_SESSION['adminStav'] == 1){
 													echo '<div class="news-footer">
@@ -470,62 +319,230 @@
 											</div>
 												<div class="list-group">
 													<a href="javascript:history.back()" class="list-group-item list-group-item-action">Zpět</a>	<!-- php skript na vraceni se zpet podle historie prohlizeni -->
-													<a href="javascript:fbshareCurrentPage()" class="list-group-item list-group-item-action">Sdílet</a>
-													<a href="#" data-toggle="modal" data-target="#modalBan" class="list-group-item list-group-item-danger">Nahlásit chybu</a>
-													<div class="modal fade" tabindex="-1" role="dialog" id="modalBan" aria-hidden="true">
-													  <div class="modal-dialog" role="document">
-														<div class="modal-content">
-														  <div class="modal-header">
-															<h5 class="modal-title">Nahlásit chybu v příspěvku</h5>
-															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-															  <span aria-hidden="true">&times;</span>
-															</button>
-														  </div>
-														  <div class="modal-body">
-															<p>Našli jste chybu v příspěvku?<br> Neváhejte nás kontaktovat o problému a my se s ním vypořádáme!<br>
-															   Popiště váš problém do textového pole níže.<br>
-															   Např.:
-															</p>
-															<ul>
-																<li>Příspěvek se špatně zobrazuje na telefoním zařízení</li>
-																<li>V textu je pravopisná chyba</li>
-															</ul>
+									
+													';
+												
+												
+													 if(isset($_SESSION['idUzivatele'])){
+													$osql="SELECT * FROM clankyprijmuti WHERE id_clanku='$idClanku'";
+													$ovys=mysqli_query($pripojeni,$osql);
+													$orow=mysqli_fetch_assoc($ovys);
+													$idos=$orow['id_recenzenta'];
+													$status=$orow['status'];
+            	                                        if($status == 0 && $idos == $_SESSION['idUzivatele']){
+													    echo '<a href="" data-toggle="modal" data-target="#form" class="list-group-item list-group-item-danger">Ohodnotit článek</a>';
+													}
+													else if ($status == 1 && $idos == $_SESSION['idUzivatele']){
+
+													    echo '<a href="" data-toggle="modal" data-target="#form2" class="list-group-item list-group-item-success">Hodnocení</a>';
+													}
+													
+                                                    }
+												
+											echo '		
+												
+			<form method="POST" action="../scripts/ohodnoceni.php">
+			<input type="hidden" name="idClanku" value="'.$idClanku.'">
+<div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+       <div class="modal-header border-none"> <h5 class="modal-title" id="exampleModalLabel">Hodnocení</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>
+                    <div class="comment-box text-center">
+                    <h4><small>Originalita</small></h4>
+                    <div class="rating"> <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label> <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label> <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label> <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label> <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label> </div>
+                </div>
+                  <div class="comment-box text-center">
+                    <h4><small>Odborná úroveň</small></h4>
+                    <div class="rating"> <input type="radio" name="rating2" value="5" id="55"><label for="55">☆</label> <input type="radio" name="rating2" value="4" id="44"><label for="44">☆</label> <input type="radio" name="rating2" value="3" id="33"><label for="33">☆</label> <input type="radio" name="rating2" value="2" id="22"><label for="22">☆</label> <input type="radio" name="rating2" value="1" id="11"><label for="11">☆</label> </div>
+                </div>
+                  <div class="comment-box text-center">
+                    <h4><small>Jazyková, stylistická úroveň</small></h4>
+                    <div class="rating"> <input type="radio" name="rating3" value="5" id="555"><label for="555">☆</label> <input type="radio" name="rating3" value="4" id="444"><label for="444">☆</label> <input type="radio" name="rating3" value="3" id="333"><label for="333">☆</label> <input type="radio" name="rating3" value="2" id="222"><label for="222">☆</label> <input type="radio" name="rating3" value="1" id="111"><label for="111">☆</label> </div>
+                </div>
+                <div class="comment-box text-center">
+                    <h4><small>Aktuálnost, zajímavost, přínosnost</small></h4>
+                    <div class="rating"> <input type="radio" name="rating4" value="5" id="5555"><label for="5555">☆</label> <input type="radio" name="rating4" value="4" id="4444"><label for="4444">☆</label> <input type="radio" name="rating4" value="3" id="3333"><label for="3333">☆</label> <input type="radio" name="rating4" value="2" id="2222"><label for="2222">☆</label> <input type="radio" name="rating4" value="1" id="1111"><label for="1111">☆</label> </div>
+                    
+                    <div class="comment-area"> <textarea name="nazor" class="form-control" placeholder="Jaký je tvůj názor?" rows="4"></textarea> </div>
+                 
+                </div>
+                  <div class="modal-footer">
+                  <button class="btn btn-danger send" name="ohodnot">Odeslat<i class="fa fa-long-arrow-right ml-1"></i></button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
+             
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+
+<div class="modal fade" id="form2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+       
+        
+      
+       <div class="modal-header border-none">   <h5 class="modal-title" id="exampleModalLabel">Hodnocení</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>
+                   
+                    <div class="comment-box text-center">
+                    <h4><small>Originalita</small></h4>';
+                    $hsql="SELECT * FROM hodnoceni WHERE id_clanku='$idClanku'";
+					$hvys=mysqli_query($pripojeni,$hsql);
+					$hpol=mysqli_fetch_assoc($hvys);
+                    if($hpol['originalita'] == 1){
+echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';                         
+                    }else if($hpol['originalita'] == 2){
+  echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';                         
+                    }
+                    else if($hpol['originalita'] == 3){
+  echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';                       
+                    }
+                    else if($hpol['originalita'] == 4){
+                     echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';
+                    }
+                    else if($hpol['originalita'] == 5){
+                    echo'
+                    <div class="rating"> <input type="radio" checked><label>☆</label> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> </div>                    
+                    
+                    ';
+                    
+                       
+                    }
+                     echo '
+                </div>
+                  <div class="comment-box text-center">
+                    <h4><small>Odborná úroveň</small></h4>';
+                       if($hpol['odbornost'] == 1){
+echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';                         
+                    }else if($hpol['odbornost'] == 2){
+  echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';                         
+                    }
+                    else if($hpol['odbornost'] == 3){
+  echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';                       
+                    }
+                    else if($hpol['odbornost'] == 4){
+                     echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';
+                    }
+                    else if($hpol['odbornost'] == 5){
+                    echo'
+                    <div class="rating"> <input type="radio" checked><label>☆</label> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> </div>                    
+                    
+                    ';
+                    
+                       
+                    }
+                    echo '
+                </div>
+                  <div class="comment-box text-center">
+                    <h4><small>Jazyková, stylistická úroveň</small></h4>';
+                     if($hpol['jazyk'] == 1){
+echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';                         
+                    }else if($hpol['jazyk'] == 2){
+  echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';                         
+                    }
+                    else if($hpol['jazyk'] == 3){
+  echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';                       
+                    }
+                    else if($hpol['jazyk'] == 4){
+                     echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';
+                    }
+                    else if($hpol['jazyk'] == 5){
+                    echo'
+                    <div class="rating"> <input type="radio" checked><label>☆</label> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> </div>                    
+                    
+                    ';
+                    
+                       
+                    }
+                    echo '
+                </div>
+                <div class="comment-box text-center">
+                    <h4><small>Aktuálnost, zajímavost, přínosnost</small></h4>';
+                       if($hpol['aktualnost'] == 1){
+echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';                         
+                    }else if($hpol['aktualnost'] == 2){
+  echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';                         
+                    }
+                    else if($hpol['aktualnost'] == 3){
+  echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';                       
+                    }
+                    else if($hpol['aktualnost'] == 4){
+                     echo' 
+                    <div class="rating"> <input type="radio"><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
+                    ';
+                    }
+                    else if($hpol['aktualnost'] == 5){
+                    echo'
+                    <div class="rating"> <input type="radio" checked><label>☆</label> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> </div>                    
+                    
+                    ';
+                    
+                       
+                    }
+                    echo '
+                     <div class="comment-box text-center">
+                    <h4><small>Názor</small></h4>
+                     </div>
+                    <div class="comment-area"> <textarea name="nazor" class="form-control" placeholder="Jaký je tvůj názor?" rows="4" disabled>'.$hpol['nazor'].'</textarea> </div>
+                   
+                </div>
+                  <div class="modal-footer">
+                  
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
+             
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-															<form action="../php_soubory/zadostOpravaClanku.php" method="post">
-															<textarea style="width:100%;" name=content>
-															</textarea>
-															</div>
-														  <div class="modal-footer">
-																<input type="hidden" name="idClanku" value="'.$row['id'].'">
-																<input type="hidden" name="titulekClanku" value="'.$row['titulek'].'">
-																<input type="hidden" name="datumVytvoreniClanku" value="'.$row['datum'].'">
-																<button type="submit" class="btn btn-danger" name=submitProblem>Odeslat žádost</button>
-															</form>
-															<button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
-														  </div>
-														</div>
-													  </div>
-													</div>
+
+
+
+
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="card">
-												<div class="card-body">
-													fotka
-												</div>
-											</div>
-										</div>
-									</div>
+								
 						</div>
 					</div>
 				</div>';
 		  }
 		}
-		if($celaURL=="http://localhost/pages/clanky.php?clanek".$idClanku){
+		if($celaURL=="pages/clanky.php?clanek".$idClanku){
 			echo '<div class="container" style="margin-top: 20px;margin-bottom: 20px;padding: 20px">
 			';
 			$sqlKoment="SELECT * FROM komentar WHERE id_clanku=$idClanku;";
@@ -563,7 +580,7 @@
 			}
 			echo '</div>';
 		}
-		if(isset($_SESSION['idUzivatele']) && $celaURL=="http://localhost/pages/clanky.php?clanek".$idClanku){
+		if(isset($_SESSION['idUzivatele']) && $celaURL=="pages/clanky.php?clanek".$idClanku){
 			$_SESSION['idDiskuze']=$idClanku;
 			echo '<div class="container">
 						<div style="margin-top:40px;">';
@@ -578,5 +595,7 @@
 			echo '</div></div>';
 		}
 	?>
+
+
 </body>
 </html>

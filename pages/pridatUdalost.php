@@ -31,7 +31,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <a class="navbar-brand" id="menuUvodLogo" href="../index.php"><img src="../photos/logospolytechnikos_logo.png" class="logoNavbar" alt="navbar logo"></a>
+      <a class="navbar-brand" id="menuUvodLogo" href="../index.php"><img src="../photos/logo.png" class="logoNavbar" alt="navbar logo"></a>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0" id="menuUvod">
           <li class="nav-item">
             <a class="nav-link" href="clanky.php"><i class="fas fa-clipboard-list" style="margin-right:7px;"></i>Články</a>
@@ -49,7 +49,7 @@
                             $filename="../profilovky/profile".$_SESSION['idUzivatele']."*";
                             $fileinfo=glob($filename);
                             $fileext=explode(".",$fileinfo[0]);
-                            echo '<img src="../profilovky/profile'.$_SESSION['idUzivatele'].'.'.$fileext[1].'" id="profilFoto" width="50" height="45" alt="Profilová fotka"></a>';
+                            echo '<img src="../profilovky/profile'.$_SESSION['idUzivatele'].'.'.$fileext[3].'" id="profilFoto" width="50" height="45" alt="Profilová fotka"></a>';
                           }
                           else{
                             echo '<img src="../profilovky/default.jpg" id="profilFoto" width="50" height="48" alt="Profilová fotka"></a>';

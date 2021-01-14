@@ -4,10 +4,11 @@ if(isset($_POST['registrace'])){
 
     include_once 'dtb.php';
 
-    $jmeno = $_POST['jmeno'];
-    $email = $_POST['email'];
-    $heslo_1 = $_POST['heslo1'];
-    $heslo_2 = $_POST['heslo2'];
+        
+    $jmeno= mysqli_real_escape_string($pripojeni, $_POST['jmeno']);
+    $email= mysqli_real_escape_string($pripojeni, $_POST['email']);
+     $heslo_1= mysqli_real_escape_string($pripojeni, $_POST['heslo1']);
+      $heslo_2= mysqli_real_escape_string($pripojeni, $_POST['heslo2']);
 
     //Chyby
     //Kontrola jestli nejsou policka prazdna
@@ -15,7 +16,7 @@ if(isset($_POST['registrace'])){
       header("Location: ../index.php?registrace=prazdna");
       exit();
     }else{
-    if ($heslo_1 != $heslo_2 || strlen($heslo_1) < 6) {
+    if ($heslo_1 != $heslo_2 || strlen($heslo_1) < 8) {
 	   header("Location: ../index.php?registrace=neplatneheslo&uziv_jmeno=$jmeno&email=$email");
       exit();
     }else{
