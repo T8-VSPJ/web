@@ -90,12 +90,12 @@ else if(isset($_POST['uclanek'])){
     $id = $_POST['id'];
     $titulekText = $_POST['titulek'];
     $clanekText = $_POST['content'];
-    $status=11;
+    
     if(!empty(trim($titulekText)) && !empty(trim($clanekText))){
-        $sql="UPDATE clankyprijmuti SET titulek=?, text=?, status=? WHERE id=?;";  
+        $sql="UPDATE clankyprijmuti SET titulek=?, text=? WHERE id=?;";  
 				  	  $stmt=mysqli_stmt_init($pripojeni);
-				  		if(mysqli_stmt_prepare($stmt,$sql)){
-					  		mysqli_stmt_bind_param($stmt, "ssss",$titulekText,$clanekText,$status,$id);
+				  if(mysqli_stmt_prepare($stmt,$sql)){
+					  		mysqli_stmt_bind_param($stmt, "sss",$titulekText,$clanekText,$id);
       						mysqli_stmt_execute($stmt);
       					
       				$foto=$_FILES['foto'];
@@ -124,12 +124,29 @@ else if(isset($_POST['uclanek'])){
 
 			 $foto = "../photos/clanek".$id.".".$fotoKonc;
             if(!unlink($foto)){
-                header("Location: ../pages/editor.php?chyba"); 
+                 $fotoNoveJmeno = "clanek".$id.".".$fotoPismoExt; //vyrobi unikatni jmeno. Delame to protoze se muze stat, ze by dva uzivatele chteli nahrat stejne jmeno fotky napr. foto.jpg. Pokud by se tak stalo tak by se fotka ve slozce prepsala a zmizela.
+                $fotoUmisteni = '../photos/' . $fotoNoveJmeno;
+                move_uploaded_file($fotoTmp,$fotoUmisteni);
+                     $sql="UPDATE clankyprijmuti SET fotka=? WHERE id=?;";  
+				  	  $stmt=mysqli_stmt_init($pripojeni);
+				  if(mysqli_stmt_prepare($stmt,$sql)){
+					  		mysqli_stmt_bind_param($stmt, "ss",$id,$id);
+      						mysqli_stmt_execute($stmt);
+      						     header("Location: ../pages/editor.php?uspesne"); 
+				  }
+           
             }else{
               $fotoNoveJmeno = "clanek".$id.".".$fotoPismoExt; //vyrobi unikatni jmeno. Delame to protoze se muze stat, ze by dva uzivatele chteli nahrat stejne jmeno fotky napr. foto.jpg. Pokud by se tak stalo tak by se fotka ve slozce prepsala a zmizela.
                 $fotoUmisteni = '../photos/' . $fotoNoveJmeno;
                 move_uploaded_file($fotoTmp,$fotoUmisteni);
-            	  header("Location: ../pages/editor.php?uspesne");  
+                                $sql="UPDATE clankyprijmuti SET fotka=? WHERE id=?;";  
+				  	  $stmt=mysqli_stmt_init($pripojeni);
+				  if(mysqli_stmt_prepare($stmt,$sql)){
+					  		mysqli_stmt_bind_param($stmt, "ss",$id,$id);
+      						mysqli_stmt_execute($stmt);
+      							  header("Location: ../pages/editor.php?uspesne");  
+				  }
+            
             }
            	
         

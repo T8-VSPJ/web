@@ -9,13 +9,42 @@ html {
     min-height: 100%;
 }
 body{
-  font-family: Arial,Helvetica,sans-serif !important;
-  background-image: url("../foto/takto.png");
+  font-family: Arial,Helvetica,sans-serif!important;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
 }
+  a[disabled="disabled"] {
+        pointer-events: none;
+        color:red;
+    }
+       
+.edit-form2 button {
+    background: transparent;
+    opacity: 0.7;
+    border: 0px;
+    cursor: pointer;
+}
+.edit-form button {
+    background: transparent;
+    opacity: 0.7;
+    border: 0px;
+    cursor: pointer;
+}
+.edit-form2 {
+    right: 20px;
+    top: 40px;
+
+    position: absolute;
+}
+
+.edit-form {
+    right: 20px;
+    top: 20px;
+    position: absolute;
+}
+
 .image-preview{
     width:190px;
     height:130px;
@@ -143,6 +172,7 @@ body{
 .chat_list {
 	border-bottom: 1px solid #ddd;
 	margin: 0;
+	cursor:pointer;
 	padding: 18px 16px 10px;
 }
 
@@ -161,8 +191,8 @@ body{
 }
 
 .incoming_msg_img img {
-	width: 100%;
-		border-radius: 50%;
+	width: 75%;
+	border-radius: 50%;
 }
 
 .received_msg {

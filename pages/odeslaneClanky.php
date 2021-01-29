@@ -2,6 +2,9 @@
 	session_start();
 
 	include_once '../scripts/dtb.php';
+	if($_SESSION['stavAutor'] == 0 && $_SESSION['stavRedaktor'] == 0 && $_SESSION['stavSefredaktor'] == 0 && $_SESSION['stavAdmin'] == 0 && $_SESSION['stavRecenzant'] == 0 || $_SESSION['ban'] == 1){
+        header('Location: ../index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="cs">
@@ -21,10 +24,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src='https://www.google.com/recaptcha/api.js?hl=cs'></script>
 <script src="https://cdn.tiny.cloud/1/eoj1vdl030re3i765qa6n3j57jqfnns3nr0518tqoi0f9cvl/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="shortcut icon" href="../photos/favicon.ico" type="image/x-icon">
 <link rel="icon" href="../photos/favicon.ico" type="image/x-icon">
-
 
 </head>
 <body>
@@ -133,7 +135,7 @@ if($celaURL != "http://logospolytechnos.mzf.cz/pages/odeslaneClanky.php"){
 													';
 												
 												
-													 if(isset($_SESSION['idUzivatele'])){
+												if($_SESSION['idUzivatele']){
 													$osql="SELECT * FROM clankyprijmuti WHERE id='$idClanku'";
 													$ovys=mysqli_query($pripojeni,$osql);
 													$orow=mysqli_fetch_assoc($ovys);
@@ -142,7 +144,7 @@ if($celaURL != "http://logospolytechnos.mzf.cz/pages/odeslaneClanky.php"){
             	                                        if($status == 0 && $idos == $_SESSION['idUzivatele']){
 													    echo '<a href="" data-toggle="modal" data-target="#form" class="list-group-item list-group-item-danger">Ohodnotit článek</a>';
 													}
-													else if ($status == 1 && $_SESSION['idUzivatele']){
+													else if ($status == 11 || $status == 1 && $_SESSION['idUzivatele']){
 
 													    echo '<a href="" data-toggle="modal" data-target="#form2" class="list-group-item list-group-item-success">Hodnocení</a>';
 													}
@@ -414,7 +416,7 @@ else{
                           
  
                                      echo '<tbody>';
-                                 if($row['status'] == 11){
+                                 if($row['status'] == 11 || $row['status'] == 110){
                                      echo '<tr data-status="oka">';
                                  }
                                  else if($row['status'] == 10)
@@ -484,6 +486,12 @@ else{
                                 
 
                                           }
+                                           else if($row['status'] == 110){
+                                               echo '  <td><label class="badge badge-danger">Smazán adminem</label></td>';
+                                
+
+                                          }
+                                          
                                           
                                         
                                        
@@ -747,7 +755,7 @@ if($celaURL != "http://logospolytechnos.mzf.cz/pages/odeslaneClanky.php"){
             	                                        if($status == 0 && $idos == $_SESSION['idUzivatele']){
 													    echo '<a href="" data-toggle="modal" data-target="#form" class="list-group-item list-group-item-danger">Ohodnotit článek</a>';
 													}
-													else if ($status == 1 && $_SESSION['idUzivatele']){
+													else if ($status == 11 || $status == 1 && $_SESSION['idUzivatele']){
 
 													    echo '<a href="" data-toggle="modal" data-target="#form2" class="list-group-item list-group-item-success">Hodnocení</a>';
 													}
@@ -1168,7 +1176,7 @@ else{
                                 <tbody>';
                                 
                              
-                                  if($row['status'] == 1 || $row['status'] == 11 || $row['status'] == 10){
+                                  if($row['status'] == 1 || $row['status'] == 11 || $row['status'] == 10 || $row['status'] == 110){
                                      echo '<tr data-userid="'.$row['id_recenzenta'].'"  data-status="oka">';
                                  }
                                  else if($row['status'] == 0){
@@ -1208,6 +1216,12 @@ else{
                                          else if($row['status'] == 0){
                                                  echo '  <td><label class="badge badge-danger">Neohodnotil</label></td>';  
                                           }
+                                             else if($row['status'] == 110){
+                                               echo '  <td><label class="badge badge-danger">Smazán adminem</label></td>';
+                                
+
+                                          }
+                                          
                                           
                                           
                                        
@@ -1266,7 +1280,7 @@ else{
                               echo '
                                 <tbody>';
                                 
-                                if($row['status'] == 11){
+                                if($row['status'] == 11 || $row['status'] == 110){
                                     echo '<tr data-userid="'.$row['id_redaktora'].'"  data-status="oka">';
                                  }
                                  else if($row['status'] == 10)
@@ -1314,6 +1328,11 @@ else{
                                           }
                                           else if($row['status'] == 10){
                                                echo '  <td><label class="badge badge-danger">Zamítl</label></td>';  
+                                          }
+                                             else if($row['status'] == 110){
+                                               echo '  <td><label class="badge badge-danger">Smazán adminem</label></td>';
+                                
+
                                           }
                                           
                                           
@@ -1597,7 +1616,7 @@ if($celaURL != "http://logospolytechnos.mzf.cz/pages/odeslaneClanky.php"){
             	                                        if($status == 0 && $idos == $_SESSION['idUzivatele']){
 													    echo '<a href="" data-toggle="modal" data-target="#form" class="list-group-item list-group-item-danger">Ohodnotit článek</a>';
 													}
-													else if ($status == 1 && $_SESSION['idUzivatele']){
+													else if ($status == 11 || $status == 1 && $_SESSION['idUzivatele']){
 
 													    echo '<a href="" data-toggle="modal" data-target="#form2" class="list-group-item list-group-item-success">Hodnocení</a>';
 													}
@@ -1878,7 +1897,7 @@ else{
                             $row2 = mysqli_fetch_assoc($jmeno);
  
                                      echo '<tbody>';
-                                 if($row['status'] == 11){
+                                 if($row['status'] == 11 || $row['status'] == 110){
                                      echo '<tr data-status="oka">';
                                  }
                                  else if($row['status'] == 10)
@@ -1943,16 +1962,28 @@ else{
                                          echo '<td><a href="editor.php?id='.$id_clanku.'" class="btn btn-warning btn-circle"><i style="color:white" class="fas fa-pen"></i></a></td>';
                                           }
                                          else if($row['status'] == 0){
-                                                 echo '  <td><label class="badge badge-danger">Neohodnocen</label></td>';  
+                                                 echo '  <td><label class="badge badge-danger">Neohodnocen</label></td>
+                                              
+                                                  ';  
                                   
                                           }
                                           else if($row['status'] == 11){
-                                              echo '  <td><label class="badge badge-success">Schválen</label></td>';
+                                              echo '  <td><label class="badge badge-success">Schválen</label></td> 
+                                              <td></td> <td></td> <td></td> ';
                                               
                                           }
                                           else if($row['status'] == 10){
-                                               echo '  <td><label class="badge badge-danger">Zamítnut</label></td>';  
+                                               echo '  <td><label class="badge badge-danger">Zamítnut</label></td>
+                                              ';  
                                           }
+                                             else if($row['status'] == 110){
+                                               echo '  <td><label class="badge badge-danger">Smazán adminem</label></td>
+                                            
+                                            ';
+                                
+
+                                          }
+                                          
                                           
                                           if($row['id_recenzenta'] == 0){
                                            echo '<td><a href="" data-toggle="modal" data-target="#addrecenzent'.$id_clanku.'"  class="btn btn-info btn-circle"><i class="fas fa-plus"></i></a>
@@ -1964,6 +1995,7 @@ else{
                                            ';
                                               
                                           }
+                                          
                                        
                                       
                                   echo ' </tr>';
@@ -2222,7 +2254,7 @@ if($celaURL != "http://logospolytechnos.mzf.cz/pages/odeslaneClanky.php"){
             	                                        if($status == 0 && $idos == $_SESSION['idUzivatele']){
 													    echo '<a href="" data-toggle="modal" data-target="#form" class="list-group-item list-group-item-danger">Ohodnotit článek</a>';
 													}
-													else if ($status == 1 && $idos == $_SESSION['idUzivatele']){
+													else if ($status == 11 || $status == 1 && $idos == $_SESSION['idUzivatele']){
 
 													    echo '<a href="" data-toggle="modal" data-target="#form2" class="list-group-item list-group-item-success">Hodnocení</a>';
 													}
@@ -2549,7 +2581,7 @@ echo'  <div class="alert bg-danger mb-5 py-4" role="alert">
                
                                 
                             echo '  <tbody>';
-                                      if($row['status'] == 1){
+                                      if($row['status'] == 1 || $row['status'] == 110 || $row['status'] == 11 || $row['status'] == 10){
                                      echo '<tr data-status="ohod">';
 
                                     }
@@ -2571,9 +2603,15 @@ echo'  <div class="alert bg-danger mb-5 py-4" role="alert">
                                           if($row['status'] == 0){
                                             echo '  <td><label class="badge badge-danger">Neohodnocen</label></td>';  
                                           }
-                                        else if($row['status'] == 1){
+                                        else if($row['status'] == 1 || $row['status'] == 11 || $row['status'] == 10){
                                             echo '  <td><label class="badge badge-success">Ohodnocen</label></td>';  
                                           }
+                                         else if($row['status'] == 110){
+                                               echo '  <td><label class="badge badge-danger">Smazán adminem</label></td>';
+                                
+
+                                          }
+                                          
                                       
                                   echo ' </tr>
                                     
@@ -2624,13 +2662,168 @@ $(document).ready(function () {
 }
 
 
+if( $_SESSION['stavAdmin'] == 1){
 
-	
+        $idPom=$_SESSION['idUzivatele'];
+   
+    $ted = date("Y-m-d");
+   
+      $sql = "SELECT * FROM clanky"; 	//limit - max int, dotazuju se na vypis vseho na urcitem id, ktere si beru z posledniho znaku v URL, kde si ho nastavuju podle id, když beru všechny řádky z datbaze
+       $vys = mysqli_query($pripojeni,$sql);
+    echo'
+ 
+        <div class="justify-content-center">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Výpis schválených příspěvků</h4>
+                        
+						
+		
+							
+							
+                        <div class="col-12 container">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Titulek</th>
+                                        <th>Datum</th>
+                                        <th> </th> 
+                                         <th>Akce</th>
+                                     '
+                                       ;
+                                        
+                                        
+                                   echo '</tr>
+                                </thead>';
+                           
+                           
+                             
+
+                                    while($row = mysqli_fetch_assoc($vys)){
+                              $id_clanku=$row['id'];
+                            $datu = strtotime($row['datum']);
+                          
+ 
+                                     echo '<tbody>';
+                               
+                                       echo '<tr>';
+                             
+                                 
+                                   
+                                 echo' <td>'.++$i.'</td>
+                                        <td>'.$row['titulek'].'</td>
+                                 
+                                        <td>'.date('d.m.Y', $datu).'</td>';
+                                       
+                                       
+                                            $sql2="SELECT * FROM uzivatele WHERE id='".$row['id_redaktora']."'";
+                                            $vys2=mysqli_query($pripojeni,$sql2);
+                                            $row2=mysqli_fetch_assoc($vys2);
+                                            $sql3="SELECT * FROM uzivatele WHERE id='".$row['id_recenzenta']."'";
+                                            $vys3=mysqli_query($pripojeni,$sql3);
+                                            $row3=mysqli_fetch_assoc($vys3);
+                                           
+                                         
+                                       
+                                         echo '<td><a href="clanky.php?clanek'.$id_clanku.'">Zobrazit článek</a></td>
+                                        <td><a href="" data-toggle="modal" data-target="#smazat'.$id_clanku.'" class="btn btn-danger btn-circle"><i class="fas fa-trash"></i></a></td>
+
+                                         
+                                         ';  
+                                   
+                                        
+                                       
+                                      
+                                  echo ' </tr>';
+                                  
+
+              
+                 
+                                            
+                                        
+           echo '<form method="POST" action="../scripts/add.php">
+			<input type="hidden" name="idClanku" value="'.$id_clanku.'">
+			<input type="hidden" name="idClanku2" value="'.$row['id_clanku'].'">
+		
+<div class="modal fade" id="smazat'.$id_clanku.'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+       <div class="modal-header border-none"> <h5 class="modal-title" id="exampleModalLabel">Opravdu chcete smazat článek?</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>
+';
+   echo ' 
+
+               
+                  <div class="modal-footer">
+                  <button class="btn btn-danger send" name="smazatadmin">Smazat<i class="fa fa-long-arrow-right ml-1"></i></button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
+             
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>    
+                                            
+                                            
+                                
+                                
+                              </tbody>  ';
+                               
+                                    
+                                }
+                         
+                          
+                                 
+                              
+                      
+                            echo '</table>
+                                                              
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+';
+
+     
+         
+
+    
+    ?>
+
+    <?php
+    
+    
+    
+}
 
    
  
 ?>
-
+ <?php echo '<input type="hidden" id="a" value="'.$_SESSION['idUzivatele'].'">'; ?>
+  <script>
+  $(document).ready(function() {
+  	var a = $('#a').val();
+          setInterval(function(){ 
+			   	$.ajax({
+				url: "../scripts/update.php",
+				type: "POST",
+			     data: {
+					a: a
+			
+				},
+			
+			});     
+		
+		}, 2000);
+  });
+    </script>
 
 </body>
 </html>

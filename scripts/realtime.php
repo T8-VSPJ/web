@@ -23,15 +23,18 @@ $output="";
          
                          
                     }
-                    elseif($chat['FromUser'] != $fromUser){
+         elseif($chat['FromUser'] != $fromUser){
                                           
-   $sql2="SELECT * FROM uzivatele WHERE id='$toUser'";
+   $sql2="SELECT * FROM uzivatele WHERE id='$fromUser'";
+   
 		 $vys2=mysqli_query($pripojeni,$sql2);
-		 $pole2=mysqli_fetch_assoc($vys2);      
+		 $pole2=mysqli_fetch_assoc($vys2);    
+		 
            if($pole2['profilova_fotografie'] == 1){
 		         $filename="../profilovky/profile".$pole2['id']."*";
         $fileinfo=glob($filename);
 		$fileext=explode(".",$fileinfo[0]); 
+		
 		$fotoska = '<div class="incoming_msg_img"> <img style="margin-bottom:15px" src="../profilovky/profile'.$pole2['id'].'.'.$fileext[3].'" alt="sunil"> </div>';
 
 		    }

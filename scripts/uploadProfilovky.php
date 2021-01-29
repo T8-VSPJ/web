@@ -40,4 +40,8 @@
       header("Location: ../pages/nastaveni.php?uploadFoto=spatnytypfotografie");
     }
   }
+  else{
+      	 header("Location: ../index.php");
+	 exit();
+  }
 ?>

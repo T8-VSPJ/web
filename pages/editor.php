@@ -1,6 +1,11 @@
 <?php
 	session_start();
 	include_once '../scripts/dtb.php';
+	if(!$_SESSION['idUzivatele'] || $_SESSION['ban'] == 1){
+	    header("Location: ../index.php");
+	}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="cs">
@@ -20,7 +25,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src='https://www.google.com/recaptcha/api.js?hl=cs'></script>
 <script src="https://cdn.tiny.cloud/1/eoj1vdl030re3i765qa6n3j57jqfnns3nr0518tqoi0f9cvl/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="shortcut icon" href="../photos/favicon.ico" type="image/x-icon">
 <link rel="icon" href="../photos/favicon.ico" type="image/x-icon">
 <script>
@@ -40,6 +45,7 @@
   
   <?php
   include "menu.php";
+
   
   if(isset($_GET["id"]) && $_SESSION['stavRedaktor'] == 1){
      $id= $_GET["id"];
@@ -103,7 +109,7 @@
            </div>
        
   
-        <div class="py-3 pb-4 pl-3 pr-3"> <button type="submit" style="width:100%" name="uclanek" class="btn btn-success mr-3"><strong>Uložit a schválit</strong></button> </div>
+        <div class="py-3 pb-4 pl-3 pr-3"> <button type="submit" style="width:100%" name="uclanek" class="btn btn-success mr-3"><strong>Uložit</strong></button> </div>
 
     </div>
     </form>
@@ -113,7 +119,7 @@
 	';
      
   }
-  else if ($_SESSION['stavAutor'] == 1){
+ else if ($_SESSION['stavAutor'] == 1){
         echo '
 	<div class="container">
 	<div class="row justify-content-center">
@@ -162,12 +168,8 @@
   
       
   }
-  
 
-  
-  
-  
-  
+
   
   
   
@@ -177,6 +179,24 @@
   
 
   ?>
+   <?php echo '<input type="hidden" id="a" value="'.$_SESSION['idUzivatele'].'">'; ?>
+  <script>
+  $(document).ready(function() {
+  	var a = $('#a').val();
+          setInterval(function(){ 
+			   	$.ajax({
+				url: "../scripts/update.php",
+				type: "POST",
+			     data: {
+					a: a
+			
+				},
+			
+			});     
+		
+		}, 2000);
+  });
+    </script>
   <script>
          const inpFile=document.getElementById("inpFile");
        const previewContainer=document.getElementById("imagePreview");
@@ -217,5 +237,6 @@
          }
        });
   </script>
+  
 </body>
 </html>

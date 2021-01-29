@@ -24,6 +24,7 @@ else if(isset($_POST['schvaleni'])){
 $idClanku=$_POST['idClanku'];
 
 
+
 $stav=11;
         $stmt=mysqli_stmt_init($pripojeni);
              $sql="UPDATE clankyprijmuti SET status=? WHERE id=?";
@@ -38,9 +39,9 @@ $stav=11;
                             $autor=$row['id_autora'];
                             $dat=$row['datum'];
                             $fotka=$row['fotka'];
-                                  $sql="INSERT INTO clanky (titulek, text, id_autora, datum, fotka) VALUES(?,?,?,?,?);";
+                                  $sql="INSERT INTO clanky (titulek, text, id_autora, datum, fotka,id_clanku) VALUES(?,?,?,?,?,?);";
 			                     if(mysqli_stmt_prepare($stmt,$sql)){
-    				            mysqli_stmt_bind_param($stmt, "sssss",$titukek,$text,$autor,$dat,$fotka);
+    				            mysqli_stmt_bind_param($stmt, "ssssss",$titukek,$text,$autor,$dat,$fotka,$idClanku);
                                  mysqli_stmt_execute($stmt);
                                    header("Location: ../pages/odeslaneClanky.php"); 
     			                 }
@@ -63,6 +64,29 @@ $stav=10;
     				      mysqli_stmt_bind_param($stmt, "ss",$stav,$idClanku);
                         mysqli_stmt_execute($stmt);
                             header("Location: ../pages/odeslaneClanky.php");
+  		                
+    			  }
+
+            
+}
+else if(isset($_POST['smazatadmin'])){
+  include 'dtb.php';
+$idClanku=$_POST['idClanku'];
+$idClanku2=$_POST['idClanku2'];
+$stav=110;
+
+        $stmt=mysqli_stmt_init($pripojeni);
+             $sql="DELETE FROM clanky WHERE id=?";
+			      if(mysqli_stmt_prepare($stmt,$sql)){
+    				      mysqli_stmt_bind_param($stmt, "s",$idClanku);
+                        mysqli_stmt_execute($stmt);
+                        $sql2="UPDATE clankyprijmuti SET status=? WHERE id=?";
+                         if(mysqli_stmt_prepare($stmt,$sql2)){
+                           mysqli_stmt_bind_param($stmt, "ss",$stav,$idClanku2);
+                           mysqli_stmt_execute($stmt);
+                             header("Location: ../pages/odeslaneClanky.php"); 
+                         }
+                           
   		                
     			  }
 

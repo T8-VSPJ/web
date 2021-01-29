@@ -27,4 +27,8 @@
 	 header("Location: ../pages/amenu.php?uzivatel==sefredaktor");
 	 exit();
 	}
+	else{
+	     header("Location: ../index.php");
+	 exit();
+	}
 ?>

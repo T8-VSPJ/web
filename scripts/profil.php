@@ -54,7 +54,7 @@ session_start();
           
        }
        
-        if(!empty(trim($uziv_jmeno))&& empty(trim($email)) && empty(trim($heslo_1)) && empty(trim($heslo_2))&& empty(trim($stareheslo))){
+        if(!empty(trim($uziv_jmeno)) && empty(trim($email)) && empty(trim($heslo_1)) && empty(trim($heslo_2))&& empty(trim($stareheslo))){
           if(preg_match("/^[a-zA-Z0-9]*$/",$uziv_jmeno)){
               $sql="SELECT * FROM uzivatele WHERE id='".$_SESSION['idUzivatele']."'";
               $result = mysqli_query($pripojeni,$sql);

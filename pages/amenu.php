@@ -20,7 +20,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src='https://www.google.com/recaptcha/api.js?hl=cs'></script>
 <script src="https://cdn.tiny.cloud/1/eoj1vdl030re3i765qa6n3j57jqfnns3nr0518tqoi0f9cvl/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="shortcut icon" href="../photos/favicon.ico" type="image/x-icon">
 <link rel="icon" href="../photos/favicon.ico" type="image/x-icon">
 </head>
@@ -30,145 +30,14 @@
   
   <?php
   include "menu.php";
-  	$celaURL="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
-  	if(strpos($celaURL,"uzivatel==zabanovan") == true){
-  		echo	'<div class="alert alert-success alert-dismissible fade show" role="alert" id="errorMess">
-  							<strong>Úspěšně jste zabanoval uživatele!</strong>
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"uzivatel==unbanned") == true){
-  		echo	'<div class="alert alert-success alert-dismissible fade show" role="alert" id="errorMess">
-  							<strong>Úspěšně jste unBANoval uživatele!</strong>
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"uzivatel==smazan") == true){
-  		echo	'<div class="alert alert-success alert-dismissible fade show" role="alert" id="errorMess">
-  							<strong>Úspěšně jste smazal profil uživatele!</strong>
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"error=spatnezadejmeno") == true){
-  		echo	'<div class="alert alert-warning alert-dismissible fade show" role="alert" id="errorMess">
-  							<strong>Pozor!</strong> Zadané jméno má špatný tvar!
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"error=spatnezadanyemail") == true){
-  		echo	'<div class="alert alert-warning alert-dismissible fade show" role="alert" id="errorMess">
-  							<strong>Pozor!</strong> Zadaný e-mail má špatný tvar!
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"error=spatnezadanyemailajmeno") == true){
-  		echo	'<div class="alert alert-warning alert-dismissible fade show" role="alert" id="errorMess">
-  							<strong>Pozor!</strong> Zadaný e-mail i jméno má špatný tvar!
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"smazaniProfiloveFotografie=uspesne") == true){
-  		echo	'<div class="alert alert-success alert-dismissible fade show" role="alert" id="errorMess">
-  							<strong>Úspěšně jste smazal profilovou fotografii uživatele!</strong>
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"smazaniProfiloveFotky=neuspesne") == true){
-  		echo	'<div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorMess">
-  							<strong>Pozor!</strong> Profilová fotografie uživatele se nesmazala! Kontaktujte administrátora
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"uzivatel==autor") == true){
-  		echo	'<div class="alert alert-success alert-dismissible fade show" role="alert" id="errorMess">
-  							<strong>Úspěšně jste nastavil roli autora!</strong>
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"uzivatel==autorunset") == true){
-  		echo	'<div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorMess">
-  							Odebral jste roli autora
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"uzivatel==redaktor") == true){
-  		echo	'<div class="alert alert-success alert-dismissible fade show" role="alert" id="errorMess">
-  							<strong>Úspěšně jste nastavil roli redaktora!</strong>
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"uzivatel==redaktorunset") == true){
-  		echo	'<div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorMess">
-  							Odebral jste roli redaktora
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"uzivatel==recenzent") == true){
-  		echo	'<div class="alert alert-success alert-dismissible fade show" role="alert" id="errorMess">
-  							<strong>Úspěšně jste nastavil roli recenzenta!</strong>
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"uzivatel==recenzentunset") == true){
-  		echo	'<div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorMess">
-  							Odebral jste roli recenzenta
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-    else if(strpos($celaURL,"uzivatel==recenzent") == true){
-  		echo	'<div class="alert alert-success alert-dismissible fade show" role="alert" id="errorMess">
-  							<strong>Úspěšně jste nastavil roli šéfredaktora!</strong>
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
-  	else if(strpos($celaURL,"uzivatel==sefredunset") == true){
-  		echo	'<div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorMess">
-  							Odebral jste roli šéfredaktora
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-  							</button>
-  						</div>';
-  	}
+  include "messages.php";
+  	
 
   	$celaURL="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-  	$idClanku = substr($celaURL, strrpos($celaURL, 'a')+1);
   	if(isset($_SESSION['idUzivatele'])){
   	if($_SESSION['stavAdmin'] == 1){
   			echo '<div class="container" id="textUvod">
-  				<div class="row">
-  					<h1 class="uvodVety">Administrátorské menu</h1>
-  				</div>
+
   				<br>
   				<div class="row" style="background-color: rgb(103 103 103 / 6%);border-radius: 5px;">';
   								$sql= "SELECT * FROM uzivatele ORDER BY id DESC";
@@ -178,17 +47,15 @@
   										<div class="row">
   											<div class="col-md-12">
   												<h2>
-  													Zde naleznete výpis všech registrovaných uživatelů
+  													Výpis všech registrovaných uživatelů
   												</h2>
-  													<h3>
-  														Výpis:
-  													</h3>
+  														<br>
   												<div class="table-responsive">
   												<table class="table table-condensed table-hover">
   													<thead>
   														<tr>
   															<th>
-  																Id
+  															#
   															</th>
   															<th>
   																Jméno
@@ -203,6 +70,7 @@
   																Úroveň účtu
   															</th>
   															<th>
+  															
   															</th>
   															<th>
   															</th>
@@ -210,9 +78,10 @@
   													</thead>
   													<tbody>';
   														while($row = mysqli_fetch_assoc($vys)){
+  														    if($_SESSION['idUzivatele'] != $row['id']){
   															echo	'<tr>
   																			<td class="tabFormWl">
-  																				'.$row['id'].'
+  																				'.++$i.'
   																			</td>
   																			<td class="tabFormWl">
   																				'.$row['jmeno'].'
@@ -239,7 +108,7 @@
   																echo	'<td class="tabFormWl">';
   																                 if($row['autor'] == 0 && $row['redaktor'] == 0 && $row['recenzent'] ==0 && $row['sefredaktor']==0 && $row['admin'] ==0)
   																                 {
-  																                     echo '| Uživatel |';
+  																                     echo '| Bez role |';
   																                 }
   																				 if($row['autor']==1)
   																				 {
@@ -269,11 +138,14 @@
   																				 }
   																echo  '</td>
   																<td>
-  																<div class="dropdown" style="margin-top:-7px;">
-  																		<button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:black;">
+  																<div class="dropdown" style="margin-top:-7px;">';
+  																if($row['admin']==0){
+  																   echo ' <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:black;">
   																			Možnosti
-  																		</button>
-  																		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">';
+  																		</button>'; 
+  																}
+
+  																echo		'<div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">';
   																				if($row['ban']==0){
   																					echo '
   																					<form action="../scripts/ban.php" method="post" style="margin-bottom:5px;">
@@ -301,22 +173,26 @@
   																							 </button>
   																							 <input type="hidden" name="idUzivatele" value="'.$row['id'].'">
   																							</form>';
-  																				}
-  																				echo '<form action="../scripts/smazaniProfilovky.php" method="post" style="margin-bottom:5px;">
-  																							 <button class="dropdown-item" type="submit" name="odstranitProfilovouFoto" style="margin-right:5px;outline:none;border:0;cursor:pointer;">
+  																														echo '<form action="../scripts/smazaniProfilovky.php" method="post" style="margin-bottom:5px;">
+  																							 <button class="dropdown-item" type="submit" name="odstranitProfilovouFotoA" style="margin-right:5px;outline:none;border:0;cursor:pointer;">
   																								<i class="fas fa-trash-alt" style="margin-right:5px;"></i>
   																								Smazat profilovou fotografii
   																							 </button>
   																							 <input type="hidden" name="idUzivatele" value="'.$row['id'].'">
   																							</form>';
+  																				}
+  													
   																echo '</div>
   																		</td>
   																		<td>
-  																		    <div class="dropdown" style="margin-top:-7px;">
-  																		<button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:black;">
+  																		    <div class="dropdown" style="margin-top:-7px;">';
+  																	    		if($row['admin']==0){
+  																echo	'	<button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:black;">
   																			Nastavit role
-  																		</button>
-  																		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">';
+  																		</button>';
+  																		}
+  																	echo	
+  																	'<div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">';
   																				if($row['autor']==0){
   																				echo '<form action="../scripts/setrole.php" method="post" style="margin-bottom:5px;">
   																							<button class="dropdown-item" type="submit" name="setautor" style="border:0;cursor:pointer;">
@@ -380,7 +256,7 @@
   																							 <input type="hidden" name="idUzivatele" value="'.$row['id'].'">
   																							</form>';
   																				}
-  																				else{
+  																				else {
   																				echo '<form action="../scripts/unsetrole.php" method="post" style="margin-bottom:5px;">
   																							<button class="dropdown-item" type="submit" name="unsetsefred" style="border:0;cursor:pointer;">
   																								<i class="fas fa-address-book" style="margin-right:5px;color:#c12e1b;"></i>
@@ -391,7 +267,9 @@
   																				}
   																	echo '</td>
   																	</tr>';
-  														}
+  														
+  														    }
+  														    }
   											 echo '</tbody>
   												</table>
   												</div>
@@ -400,11 +278,6 @@
   									</div>
   									</div>
   									</div>';
-  									echo '<footer id="sticky-footer" class="page-footer py-4 bg-light text-white-50">
-  											    <div class="container text-center">
-  											      <small>Vytvořil Luboš "MarravinCZ" Kučera<br>Copyright &copy; 2020. Všechna práva vyhrazena</small>
-  											    </div>
-  											  </footer>';
   					}
   			}
   			else{
@@ -415,5 +288,24 @@
   							</div>';
   			}
   ?>
+   <?php echo '<input type="hidden" id="a" value="'.$_SESSION['idUzivatele'].'">'; ?>
+  <script>
+  $(document).ready(function() {
+  	var a = $('#a').val();
+          setInterval(function(){ 
+			   	$.ajax({
+				url: "../scripts/update.php",
+				type: "POST",
+			     data: {
+					a: a
+			
+				},
+			
+			});     
+		
+		}, 2000);
+  });
+    </script>
+  
 </body>
 </html>

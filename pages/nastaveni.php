@@ -2,6 +2,9 @@
 	session_start();
 	include '../scripts/kontrola.php';
 	include_once '../scripts/dtb.php';
+		if(!$_SESSION['idUzivatele']){
+        header('Location: ../index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="cs">
@@ -21,16 +24,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src='https://www.google.com/recaptcha/api.js?hl=cs'></script>
 <script src="https://cdn.tiny.cloud/1/eoj1vdl030re3i765qa6n3j57jqfnns3nr0518tqoi0f9cvl/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="shortcut icon" href="../photos/favicon.ico" type="image/x-icon">
 <link rel="icon" href="../photos/favicon.ico" type="image/x-icon">
 </head>
 <body>
-
+    
   <?php
-  include 'menu.php';
-	$celaURL="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-		$sessionid=$_SESSION['idUzivatele'];
+    include 'menu.php';
+	include 'messages.php';
 	
 	echo '
 	<div class="container">
@@ -89,52 +91,25 @@ echo '<img style="border-radius:50%;width:150px;height:150px;float:left" src="..
     </form>
 </div>
 </div>
-</div>
-	';
-	
-	
-
-	if(strpos($celaURL,"uploadFoto=uspesne") == true){
-		echo	'<div class="alert alert-success alert-dismissible fade show" role="alert" id="errorMess">
-							<strong>Úspěšně jste si změnil/a profilovou fotografii!</strong>
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>';
-	}
-	else if(strpos($celaURL,"uploadFoto=fotografiejeprilisvelka") == true){
-		echo	'<div class="alert alert-warning alert-dismissible fade show" role="alert" id="errorMess">
-							<strong>Pozor!</strong> Fotografie, kterou se snažíte nahrát je příliš velká!
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>';
-	}
-	else if(strpos($celaURL,"uploadFoto=problemprinahravani") == true){
-		echo	'<div class="alert alert-warning alert-dismissible fade show" role="alert" id="errorMess">
-							<strong>Pozor!</strong> Fotografie nelze nahrát!
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>';
-	}
-	else if(strpos($celaURL,"uploadFoto=spatnytypfotografie") == true){
-		echo	'<div class="alert alert-warning alert-dismissible fade show" role="alert" id="errorMess">
-							<strong>Pozor!</strong> Fotografie má nepodporovaný formát! (povoleny jsou jpg,jpeg,png)
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>';
-	}
-	else if(strpos($celaURL,"smazaniFoto=uspesne") == true){
-		echo	'<div class="alert alert-success alert-dismissible fade show" role="alert" id="errorMess">
-							<strong>Úspěšně jste smazal profilovou fotografii!</strong>
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>';
-	}
-	?>
-  
+</div>';
+?>
+ <?php echo '<input type="hidden" id="a" value="'.$_SESSION['idUzivatele'].'">'; ?>
+  <script>
+  $(document).ready(function() {
+  	var a = $('#a').val();
+          setInterval(function(){ 
+			   	$.ajax({
+				url: "../scripts/update.php",
+				type: "POST",
+			     data: {
+					a: a
+			
+				},
+			
+			});     
+		
+		}, 2000);
+  });
+    </script>
 </body>
 </html>

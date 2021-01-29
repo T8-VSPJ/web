@@ -8,6 +8,9 @@
           <li class="nav-item">
             <a class="nav-link" href="pages/clanky.php"><i class="fas fa-clipboard-list" style="margin-right:7px;"></i>Články</a>
           </li>
+           <li class="nav-item">
+            <a class="nav-link" href="pages/info.php"><i class="fas fa-question-circle" style="margin-right:7px;"></i>Informace</a>
+          </li>
         </ul>
         <div class="ml-auto" id="profilLinky">
           <?php
@@ -32,34 +35,38 @@
                           <div class="dropdown-menu" id="dropMenu">';
                             if($_SESSION['stavAutor'] == 1)
                             {
-                              echo '<button class="dropdown-item" style="cursor:pointer;text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Autor</button>';
+                              echo '<button class="dropdown-item" style="cursor:pointer;text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Autor';if($_SESSION['ban'] == 1){echo '<br> <div style="color:red">(BANNED)</div>';} echo'</button>';
                             }
                             else if($_SESSION['stavRedaktor'] == 1)
                             {
-                              echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Redaktor</button>';
+                              echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Redaktor';if($_SESSION['ban'] == 1){echo '<br> <div style="color:red">(BANNED)</div>';} echo'</button>';
                             }
                             else if($_SESSION['stavRecenzant'] == 1)
                             {
-                              echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Recenzent</button>';
+                              echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Recenzent';if($_SESSION['ban'] == 1){echo '<br> <div style="color:red">(BANNED)</div>';} echo'</button>';
                             }
 							else if($_SESSION['stavSefredaktor'] == 1)
                             {
-                              echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Šéfredaktor</button>';
+                              echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Šéfredaktor';if($_SESSION['ban'] == 1){echo '<br> <div style="color:red">(BANNED)</div>';} echo'</button>';
                             }
 							else if($_SESSION['stavAdmin'] == 1)
                             {
-                              echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Admin</button>';
+                              echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Admin';if($_SESSION['ban'] == 1){echo '<br> <div style="color:red">(BANNED)</div>';} echo'</button>';
+                            }
+                            else{
+                               echo '<button class="dropdown-item" style="cursor:pointer; text-align: center; background-color: #a5cc9f;font-weight: bold;color:black;font-size: 20px;" disabled>Bez role';if($_SESSION['ban'] == 1){echo '<br> <div style="color:red">(BANNED)</div>';} echo'</button>';
+
                             }
               echo				'<hr><a class="dropdown-item" href="pages/nastaveni.php">Nastavení</a><hr>
               <a class="dropdown-item" href="pages/zpravy.php">Zprávy</a>';
                             if($_SESSION['stavAutor'] == 1){
-                              echo	'<a class="dropdown-item" href="pages/editor.php">Přidat článek</a>';
+                              echo	'<a class="dropdown-item" '; if($_SESSION['ban'] == 1 ){echo 'disabled="disabled"';} echo ' href="pages/editor.php">Přidat článek</a>';
                             }
 							if($_SESSION['stavAutor'] == 1 || $_SESSION['stavRedaktor'] == 1 || $_SESSION['stavRecenzant'] == 1 || $_SESSION['stavSefredaktor'] == 1 || $_SESSION['stavAdmin'] == 1){ 	//Přidání události
-								echo	'<a class="dropdown-item" href="pages/odeslaneClanky.php">Schránka příspěvků</a>';
+								echo	'<a class="dropdown-item"'; if($_SESSION['ban'] == 1 ){echo 'disabled="disabled"';} echo ' href="pages/odeslaneClanky.php">Schránka příspěvků</a>';
                             }
                             if($_SESSION['stavAdmin'] == 1){
-                                echo	'<a class="dropdown-item" href="pages/pridatUdalost.php">Přidat událost</a>';
+                             
 								echo	'<a class="dropdown-item" href="pages/amenu.php">Admin menu</a>';
                             }
                       echo			   '<div class="dropdown-divider"></div>
@@ -182,3 +189,5 @@
 		    </div>
 		  
   <!--KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL KONEC MODAL-->
+
+  

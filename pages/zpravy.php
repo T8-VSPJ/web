@@ -43,7 +43,8 @@ $(document).ready(function() {
 
 		var fu = $('#fromUser').val();
 		var tu = $('#toUser').val();
-	
+	var s = $('#s').val();
+    	var a = $('#a').val();
 			
 	$('#send').on('click', function() {
 
@@ -79,11 +80,39 @@ $(document).ready(function() {
 				}
 			});     
 		}, 700);   
-	
+		
+			setInterval(function(){ 
+			   	$.ajax({
+				url: "../scripts/realtime2.php",
+				type: "POST",
+			    data: {
+					s: s
+			
+				},
+				success:function(data){
+				    $("#msgBody2").html(data);
+				}
+			});     
+		
+		}, 700);
+		
+    
+		          setInterval(function(){ 
+			   	$.ajax({
+				url: "../scripts/update.php",
+				type: "POST",
+			     data: {
+					a: a
+			
+				},
+			
+			});     
+		
+		}, 2000);
+
 });
 </script>
 <?php
-
 
   include 'menu.php';
    
@@ -99,65 +128,11 @@ echo '
 		</div>
 	
 	  </div>
-	  <div class="inbox_chat scroll">';
+	  <div class="inbox_chat scroll"> <div id="msgBody2">		</div>	 ';
 	 
-	 
-	     
-	          $sql="SELECT * FROM uzivatele";
-	          $vys=mysqli_query($pripojeni,$sql);
-	          while($row=mysqli_fetch_assoc($vys)){
-	              	if($_SESSION['idUzivatele'] != $row['id']){
-	              	  echo'
-	      
-	       <a href="zpravy.php?uzivatel='.$row['id'].'">
-		<div class="chat_list" style="';if($row['id'] == $_GET["uzivatel"]){echo 'background:#f6495433';} echo '">
-		  <div class="chat_people">';
-	              	      if($row['profilova_fotografie'] == 1){
-		         $filename="../profilovky/profile".$row['id']."*";
-        $fileinfo=glob($filename);
-		$fileext=explode(".",$fileinfo[0]); 
-		echo '<div class="chat_img"> <img src="../profilovky/profile'.$row['id'].'.'.$fileext[3].'" alt="sunil"> </div>';
-
-		    }
-		    else{
-		        echo '<div class="chat_img"> <img src="../profilovky/default.jpg" alt="sunil"> </div>';
-
-		    }
-		    echo '<div class="chat_ib">
-			  <h5><strong>'.$row['jmeno'].'</strong></h5>
-			  <p>';
-			  if($row['admin'] == 1){
-			      echo '<strong>Admin</strong>';
-			  }
-			  else if($row['redaktor'] == 1){
-			       echo '<strong>Redaktor</strong>';
-			  }
-			  else if($row['recenzent'] == 1){
-			       echo '<strong>Recenzent</strong>';
-			  }
-			  else if($row['sefredaktor'] == 1)
-			  {
-			       echo '<strong>Sefredaktor</strong>';
-			  }
-			  else{
-			      echo '<strong>Bez role</strong>'; 
-			  }
-			  echo '</p>
-			</div>
-		  </div>
+	        
 	
-		</div>
-	   	   </a>
-	      
-	      
-	      
-	       ';
-	              	}
-	          }
 
-
-	 
-	
 	
 
 echo  '</div>
@@ -165,13 +140,14 @@ echo  '</div>
 	';
 
 if(isset($_GET["uzivatel"])){
-    
+echo ' <input value="'.$_GET["uzivatel"].'" id="s" type="hidden">';   
+
 $_SESSION['toUser'] = $_GET["uzivatel"];
 
     echo '
     
     <div class="mesgs">
-	  <div  id="m" class="msg_history">
+	  <div class="msg_history">
 		
 	    
     
@@ -187,7 +163,9 @@ $_SESSION['toUser'] = $_GET["uzivatel"];
 	  </div>
 	</div>
     ';
-}		
+}
+
+
 	
 echo '	
   </div>
@@ -198,5 +176,7 @@ echo '
 
 ?>
  
+  <?php echo '<input type="hidden" id="a" value="'.$_SESSION['idUzivatele'].'">'; ?>
+
 </body>
 </html>

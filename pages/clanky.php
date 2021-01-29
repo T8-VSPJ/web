@@ -22,7 +22,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src='https://www.google.com/recaptcha/api.js?hl=cs'></script>
 <script src="https://cdn.tiny.cloud/1/eoj1vdl030re3i765qa6n3j57jqfnns3nr0518tqoi0f9cvl/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="shortcut icon" href="../photos/favicon.ico" type="image/x-icon">
 <link rel="icon" href="../photos/favicon.ico" type="image/x-icon">
 </head>
@@ -81,17 +81,17 @@
                                         $filename="../photos/clanek".$row['fotka']."*";
                     					$fileinfo=glob($filename);
                     					$fileext=explode(".",$fileinfo[0]);  
-                    				echo '<img src="../photos/clanek'.$row['fotka'].'.'.$fileext[3].'" style="width:100%;height: 200px;" alt="Uvodni fotografie clanku">';
+                    				echo '<img src="../photos/clanek'.$row['fotka'].'.'.$fileext[3].'" style="width:100%;" alt="Uvodni fotografie clanku">';
 
 											}
 											else{
-											echo '<img src="../photos/default.jpg" style="width:100%;height: 200px;" alt="Uvodni fotografie clanku">';
+											echo '<img src="../photos/default.jpg" style="width:100%;" alt="Uvodni fotografie clanku">';
   
 											}
                     					
 													
 											  echo '</div>
-													<div class="col-md-8" id="textClankuCss">
+													<div class="col-md-8 textClankuCss">
 														<div class="news-title">
 															<a href="?clanek'.$row['id'].'"><h5>'.$row['titulek'].'</h5></a>
 														</div>
@@ -178,7 +178,7 @@
 										}
 							echo  '<li class="page-item">';
 								if($idClanku==$pomKontrola){
-								   echo	 '<a class="page-link" href="http:pages/clanky.php?strana'.($idClanku+1).'" aria-label="Next" style="background-color: #ffc9c9;pointer-events: none;">
+								   echo	 '<a class="page-link" href="http://pages/clanky.php?strana'.($idClanku+1).'" aria-label="Next" style="background-color: #ffc9c9;pointer-events: none;">
 											<span aria-hidden="true">»</span>
 											<span class="sr-only">Další</span>
 									  	</a>';
@@ -257,6 +257,7 @@
 													</div>
 													<hr>
 													<div class="news-image">';
+													
 											if($row['fotka'] > 0)
 											{
 											
@@ -273,36 +274,18 @@
 														echo '<p class="text-muted ">'.$row['popisUvod'].'</p>';
 											echo   '</div>
 													<div class="news-content">
-														<p>'.$row['text'].'</p>
+														'.$row['text'].'
 													</div>';
-												
-													/*
-													if($_SESSION['adminStav'] == 1){
-													echo '<div class="news-footer">
-																<div class="news-likes">
-																	<form action="../php_soubory/smazatPrispevek.php" method="post" style="margin-bottom:10px;">
-																	 	<button type="submit" class="btn btn-danger" name=smazat style="float:left;clear:left;">Smazat</button>
-																	</form>
-																	<form action="../php_stranky/editorUprava.php" method="post">
-																		<button type="submit" class="btn btn-warning" name=upravit style="float:left;margin-left:10px;">
-																			Upravit
-																		</button>
-																	 </form>
-																</div>
-														  </div>';
-													}
-													*/
-										echo  '</div>
+											
+											
+											
+										echo  '
+										       </div>
 											</div>
-
 										</div>
-
 									</div>
-
 								</div>
-
 							</div>
-
 						</div>
 						<div class="col-md-3">
 							<div class="row mb-2">
@@ -323,73 +306,64 @@
 													';
 												
 												
-													 if(isset($_SESSION['idUzivatele'])){
-													$osql="SELECT * FROM clankyprijmuti WHERE id_clanku='$idClanku'";
+													 if($_SESSION['idUzivatele'] && $_SESSION['stavAdmin'] == 1 || $_SESSION['stavRedaktor'] == 1 || $_SESSION['stavRecenzant'] == 1 || $_SESSION['stavAutor'] == 1 || $_SESSION['stavSefredaktor'] == 1){
+													$osql="SELECT * FROM hodnoceni WHERE id_clanku='$idClanku'";
 													$ovys=mysqli_query($pripojeni,$osql);
-													$orow=mysqli_fetch_assoc($ovys);
-													$idos=$orow['id_recenzenta'];
-													$status=$orow['status'];
-            	                                        if($status == 0 && $idos == $_SESSION['idUzivatele']){
-													    echo '<a href="" data-toggle="modal" data-target="#form" class="list-group-item list-group-item-danger">Ohodnotit článek</a>';
-													}
-													else if ($status == 1 && $idos == $_SESSION['idUzivatele']){
+													if(mysqli_num_rows($ovys) > 0){
+													    													    echo '<a href="" data-toggle="modal" data-target="#form2" class="list-group-item list-group-item-success">Hodnocení</a>';
 
-													    echo '<a href="" data-toggle="modal" data-target="#form2" class="list-group-item list-group-item-success">Hodnocení</a>';
 													}
-													
                                                     }
 												
 											echo '		
 												
 			<form method="POST" action="../scripts/ohodnoceni.php">
-			<input type="hidden" name="idClanku" value="'.$idClanku.'">
-<div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-       <div class="modal-header border-none"> <h5 class="modal-title" id="exampleModalLabel">Hodnocení</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>
-                    <div class="comment-box text-center">
-                    <h4><small>Originalita</small></h4>
-                    <div class="rating"> <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label> <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label> <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label> <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label> <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label> </div>
+			    <input type="hidden" name="idClanku" value="'.$idClanku.'">
+                <div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                       <div class="modal-header border-none"> <h5 class="modal-title" id="exampleModalLabel1">Hodnocení</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>
+                            <div class="comment-box text-center">
+                                    <h4><small>Originalita</small></h4>
+                                    <div class="rating"> <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label> <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label> <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label> <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label> <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label> </div>
+                                </div>
+                                <div class="comment-box text-center">
+                                    <h4><small>Odborná úroveň</small></h4>
+                                    <div class="rating"> <input type="radio" name="rating2" value="5" id="55"><label for="55">☆</label> <input type="radio" name="rating2" value="4" id="44"><label for="44">☆</label> <input type="radio" name="rating2" value="3" id="33"><label for="33">☆</label> <input type="radio" name="rating2" value="2" id="22"><label for="22">☆</label> <input type="radio" name="rating2" value="1" id="11"><label for="11">☆</label> </div>
+                                </div>
+                                <div class="comment-box text-center">
+                                    <h4><small>Jazyková, stylistická úroveň</small></h4>
+                                    <div class="rating"> <input type="radio" name="rating3" value="5" id="555"><label for="555">☆</label> <input type="radio" name="rating3" value="4" id="444"><label for="444">☆</label> <input type="radio" name="rating3" value="3" id="333"><label for="333">☆</label> <input type="radio" name="rating3" value="2" id="222"><label for="222">☆</label> <input type="radio" name="rating3" value="1" id="111"><label for="111">☆</label> </div>
+                                </div>
+                                <div class="comment-box text-center">
+                                    <h4><small>Aktuálnost, zajímavost, přínosnost</small></h4>
+                                    <div class="rating"> <input type="radio" name="rating4" value="5" id="5555"><label for="5555">☆</label> <input type="radio" name="rating4" value="4" id="4444"><label for="4444">☆</label> <input type="radio" name="rating4" value="3" id="3333"><label for="3333">☆</label> <input type="radio" name="rating4" value="2" id="2222"><label for="2222">☆</label> <input type="radio" name="rating4" value="1" id="1111"><label for="1111">☆</label> </div>
+                                    
+                                    <div class="comment-area"> <textarea name="nazor" class="form-control" placeholder="Jaký je tvůj názor?" rows="4"></textarea> </div>
+                                 
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-danger send" name="ohodnot">Odeslat<i class="fa fa-long-arrow-right ml-1"></i></button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
+                                </div>
+                        </div>
+                    </div>
                 </div>
-                  <div class="comment-box text-center">
-                    <h4><small>Odborná úroveň</small></h4>
-                    <div class="rating"> <input type="radio" name="rating2" value="5" id="55"><label for="55">☆</label> <input type="radio" name="rating2" value="4" id="44"><label for="44">☆</label> <input type="radio" name="rating2" value="3" id="33"><label for="33">☆</label> <input type="radio" name="rating2" value="2" id="22"><label for="22">☆</label> <input type="radio" name="rating2" value="1" id="11"><label for="11">☆</label> </div>
-                </div>
-                  <div class="comment-box text-center">
-                    <h4><small>Jazyková, stylistická úroveň</small></h4>
-                    <div class="rating"> <input type="radio" name="rating3" value="5" id="555"><label for="555">☆</label> <input type="radio" name="rating3" value="4" id="444"><label for="444">☆</label> <input type="radio" name="rating3" value="3" id="333"><label for="333">☆</label> <input type="radio" name="rating3" value="2" id="222"><label for="222">☆</label> <input type="radio" name="rating3" value="1" id="111"><label for="111">☆</label> </div>
-                </div>
-                <div class="comment-box text-center">
-                    <h4><small>Aktuálnost, zajímavost, přínosnost</small></h4>
-                    <div class="rating"> <input type="radio" name="rating4" value="5" id="5555"><label for="5555">☆</label> <input type="radio" name="rating4" value="4" id="4444"><label for="4444">☆</label> <input type="radio" name="rating4" value="3" id="3333"><label for="3333">☆</label> <input type="radio" name="rating4" value="2" id="2222"><label for="2222">☆</label> <input type="radio" name="rating4" value="1" id="1111"><label for="1111">☆</label> </div>
-                    
-                    <div class="comment-area"> <textarea name="nazor" class="form-control" placeholder="Jaký je tvůj názor?" rows="4"></textarea> </div>
-                 
-                </div>
-                  <div class="modal-footer">
-                  <button class="btn btn-danger send" name="ohodnot">Odeslat<i class="fa fa-long-arrow-right ml-1"></i></button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
-             
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</form>
+            </form>
 
 <div class="modal fade" id="form2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+        <div class="modal-content">';
        
-        
-      
-       <div class="modal-header border-none">   <h5 class="modal-title" id="exampleModalLabel">Hodnocení</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>
+                   $hsql="SELECT * FROM hodnoceni WHERE id_clanku='$idClanku'";
+					$hvys=mysqli_query($pripojeni,$hsql);
+					$hpol=mysqli_fetch_assoc($hvys);
+      echo '
+       <div class="modal-header border-none">   <h5 class="modal-title" id="exampleModalLabel">Hodnocení ('.date('d.m.Y', strtotime($hpol['datum_rec'])).')</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>
                    
                     <div class="comment-box text-center">
                     <h4><small>Originalita</small></h4>';
-                    $hsql="SELECT * FROM hodnoceni WHERE id_clanku='$idClanku'";
-					$hvys=mysqli_query($pripojeni,$hsql);
-					$hpol=mysqli_fetch_assoc($hvys);
+         
                     if($hpol['originalita'] == 1){
 echo' 
                     <div class="rating"> <input type="radio"><label>☆</label> <input type="radio"><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" ><label>☆</label> <input type="radio" checked><label>☆</label> </div> 
@@ -518,7 +492,7 @@ echo'
                    
                 </div>
                   <div class="modal-footer">
-                  
+                 
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
              
                 </div>
@@ -526,6 +500,7 @@ echo'
         </div>
     </div>
 </div>
+
 
 
 
@@ -542,7 +517,7 @@ echo'
 				</div>';
 		  }
 		}
-		if($celaURL=="pages/clanky.php?clanek".$idClanku){
+		if($celaURL=="http://logospolytechnos.mzf.cz/pages/clanky.php?clanek".$idClanku){
 			echo '<div class="container" style="margin-top: 20px;margin-bottom: 20px;padding: 20px">
 			';
 			$sqlKoment="SELECT * FROM komentar WHERE id_clanku=$idClanku;";
@@ -560,42 +535,164 @@ echo'
 						            <div class="karta"> <i class="fa fa-quote-left u-color"></i>
 						                <div class="textKomentare">'.$rowKoment['textKomentare'].'</div>
 						                <div class="d-flex justify-content-between align-items-center" style="margin-top:20px;margin-bottom">
-						                    <div class="user-about"> <span class="font-weight-bold d-block">'.$rowUzivatel['jmeno'].'</span> <span class="u-color">Designer | Developer</span>
-						                        <div class="d-flex flex-row mt-1"> <i class="fa fa-star u-color"></i> <i class="fa fa-star u-color"></i> <i class="fa fa-star-o u-color"></i> <i class="fa fa-star-o u-color"></i> <i class="fa fa-star-o u-color"></i> </div>
+						                    <div class="user-about"> <span class="font-weight-bold d-block">'.$rowUzivatel['jmeno'].'</span>
+						                    <span class="u-color">';
+						                      if($rowUzivatel['autor'] == 0 && $rowUzivatel['redaktor'] == 0 && $rowUzivatel['recenzent'] ==0 && $rowUzivatel['sefredaktor']==0 && $rowUzivatel['admin'] ==0)
+                                              {
+  												 echo '| Bez role |';
+  											  }
+  											  if($rowUzivatel['autor']==1)
+  											  {
+  												 echo '| Autor |';
+  											  }
+  											  if($rowUzivatel['redaktor']==1)
+  											  {
+  												 echo '| Redaktor |';
+  											  }
+  											  if($rowUzivatel['recenzent']==1)
+  											  {
+  												 echo '| Recenzent |';
+  											  }
+  											  if($rowUzivatel['sefredaktor']==1)
+  											  {
+  											     echo '| Šéfredaktor |';
+  											  }
+  											  if($rowUzivatel['admin']==1)
+  										      {
+  												 echo '| Admin |';
+  											  }
+  											  else if($rowUzivatel['ban'] == 1){
+  												 echo '<div style="color:darkred;">Banned</div>';
+  											  }
+  											  else if($rowUzivatel['ban'] == 2){
+  											     echo '<div style="color:darkred;">Blacklisted</div>';
+  											  }
+						                  echo '</span>
+						                        <div class="d-flex flex-row mt-1"></div>
 						                    </div>';
 																if($rowUzivatel['profilova_fotografie'] == 1){
 		                              $filename="../profilovky/profile".$rowUzivatel['id']."*";
 		                        			$fileinfo=glob($filename);
 		                        			$fileext=explode(".",$fileinfo[0]);
-																 echo '<div class="user-image"><img src="../profilovky/profile'.$_SESSION['idUzivatele'].'.'.$fileext[1].'" class="rounded-circle" width="70" alt="Uvodni fotografie clanku"></div>';
+																 echo '<div class="user-image"><img src="../profilovky/profile'.$rowUzivatel['id'].'.'.$fileext[3].'" class="rounded-circle" width="70" alt="Uvodni fotografie clanku"></div>';
 																}
 																else{
 																 echo '<div class="user-image"><img src="../profilovky/default.jpg" class="rounded-circle" width="70" alt="Uvodni fotografie clanku"></div>';
 																}
-																echo '
-						                </div>
+
+if($_SESSION['idUzivatele'] == $pomJmeno){
+echo '<form class="edit-form" method="post" action="clanky.php?clanek'.$idClanku.'">
+      <input type="hidden" name="idkomentaree" value="'.$rowKoment['id'].'">';
+      if($_SESSION['ban'] == 1){
+         echo '<button type="submit" disabled="disabled" name="editcoment">Upravit</button></form>';
+      }
+      else{
+          echo ' <button type="submit" name="editcoment">Upravit</button></form>';
+      }
+     
+      
+     
+     echo '  <form class = "edit-form2" method="post" action="../scripts/smazatcom.php">
+        <input type="hidden" name="idkomentare" value="'.$rowKoment['id'].'">
+            <input type="hidden" name="idclanku" value="'.$idClanku.'">';
+             if($_SESSION['ban'] == 1){
+                echo '  <button type="submit" disabled="disabled" name="smazatcoment">Smazat</button>';
+             }
+             else{
+                  echo '  <button type="submit" name="smazatcoment">Smazat</button>';
+             }
+     echo '
+      </form>';
+    
+}
+else if ($_SESSION['stavAdmin'] == 1){
+         echo '  <form class = "edit-form2" method="post" action="../scripts/smazatcom.php">
+        <input type="hidden" name="idkomentare" value="'.$rowKoment['id'].'">
+            <input type="hidden" name="idclanku" value="'.$idClanku.'">
+        <button type="submit" name="smazatcoment">Smazat</button>
+      </form>';
+}
+
+
+
+				echo '		                </div>
+						                
 						        </div>
+						        
 									</div>
+									
 						</div>';
 			}
 			echo '</div>';
 		}
-		if(isset($_SESSION['idUzivatele']) && $celaURL=="pages/clanky.php?clanek".$idClanku){
-			$_SESSION['idDiskuze']=$idClanku;
+		if(isset($_SESSION['idUzivatele']) && $celaURL=="http://logospolytechnos.mzf.cz/pages/clanky.php?clanek".$idClanku){
+		    if(isset($_POST['editcoment'])){
+		       $idkoment = $_POST["idkomentaree"];
+    $sql="SELECT * FROM komentar WHERE id=?;";
+     $stmt=mysqli_stmt_init($pripojeni);
+	if(mysqli_stmt_prepare($stmt,$sql)){
+		mysqli_stmt_bind_param($stmt, "s",$idkoment);
+        mysqli_stmt_execute($stmt);
+		$result = mysqli_stmt_get_result($stmt);
+	}
+	
+    $row= mysqli_fetch_assoc($result);
+    $komentar=$row["textKomentare"];
+
+			    echo '<div class="container">
+						<div style="margin-top:40px;">';
+		    	echo '<p style="font-size:18px;"><strong>Upravit komentář k tématu</strong></p>';
+			  
+			    echo '<form id="textAreaKoment" method="post" action="../scripts/smazatcom.php?id='.$idkoment.'">
+			       <input type="hidden" name="idclanku" value="'.$idClanku.'">
+							<textarea name="content" style="width:70%;float:left;">'.$komentar.'</textarea>
+						<button name="ulozitKomentar" class="btn btn-dark btn-lg" type="submit" style="margin-top:10px;float:left;clear:left;margin-bottom:50px;">Uložit komentář</button>
+						</form>';
+			   
+			    echo '</div></div>';
+		    }
+		    else{
+		        	$_SESSION['idDiskuze']=$idClanku;
 			echo '<div class="container">
 						<div style="margin-top:40px;">';
 			echo '<p style="font-size:18px;"><strong>Vložit komentář k tématu</strong></p>';
-			if(!isset($_POST['upravitKomentar'])){
+		
 			echo '<form id="textAreaKoment" method="post" action="../scripts/pridejKomentar.php">
 							<textarea name="content" style="width:70%;float:left;">
-							</textarea>
-						<button name="submitKomentar" class="btn btn-dark btn-lg" type="submit" style="margin-top:10px;float:left;clear:left;margin-bottom:50px;">Přidat komentář</button>
-						</form>';
-			}
+							</textarea>';
+							if($_SESSION['ban'] == 1){
+	 echo '<button name="submitKomentar" disabled="disabled" class="btn btn-dark btn-lg" type="submit" style="margin-top:10px;float:left;clear:left;margin-bottom:50px;">Přidat komentář</button>';
+
+							}
+							else {
+echo '<button name="submitKomentar"  class="btn btn-dark btn-lg" type="submit" style="margin-top:10px;float:left;clear:left;margin-bottom:50px;">Přidat komentář</button>';
+				    
+							}
+					echo	'</form>';
+		
 			echo '</div></div>';
+		    }
+		
 		}
 	?>
-
+ <?php echo '<input type="hidden" id="a" value="'.$_SESSION['idUzivatele'].'">'; ?>
+  <script>
+  $(document).ready(function() {
+  	var a = $('#a').val();
+          setInterval(function(){ 
+			   	$.ajax({
+				url: "../scripts/update.php",
+				type: "POST",
+			     data: {
+					a: a
+			
+				},
+			
+			});     
+		
+		}, 2000);
+  });
+    </script>
 
 </body>
 </html>

@@ -31,7 +31,7 @@ if(isset($_POST['login'])){
            $hashHesloKontrola = password_verify($heslo, $row['heslo']);
 
            if($hashHesloKontrola == false){
-             header("Location: ../index.php?prihlaseni=heslo&email=$email");
+             header("Location: ../index.php?prihlaseni=spatneheslo");
              exit();
            } elseif($hashHesloKontrola == true){
               //Kontrola jestli je ucet overeny a priadne prihlaseni
@@ -47,13 +47,16 @@ if(isset($_POST['login'])){
               $_SESSION['stavAdmin']=$row['admin'];
               
                 $_SESSION['alert']=0;
+                $_SESSION['ban']=$row['ban'];
+                header("Location: ../index.php?prihlaseni=uspesne");
+	       
 
-              header("Location: ../index.php?prihlaseni=uspesne");
+              
            }
         }
     }
   }
 }else{
-    header("Location: ../index.php?prihlaseni=chyba");
+    header("Location: ../index.php");
     exit();
 }
